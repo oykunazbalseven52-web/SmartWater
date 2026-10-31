@@ -16,6 +16,7 @@ export default function NfcLoadPage() {
   const [stage, setStage] = useState("idle");
   const isMounted = useRef(false);
   const flowLocked = useRef(false);
+  const readLocked = useRef(false);
 
   useEffect(() => {
     let isActive = true;
@@ -42,11 +43,18 @@ export default function NfcLoadPage() {
   }, []);
 
   useEffect(() => {
-    if (stage !== "checking") return;
+    const transitions = {
+      checking: { next: "waiting", delayMs: 1500 },
+      reading: { next: "matched", delayMs: 1000 },
+      matched: { next: "loading", delayMs: 1000 },
+    };
+    const transition = transitions[stage];
+    if (!transition) return;
 
+    // loading bu aşamada yalnızca geçiş hedefidir; aktarım başlatılmaz.
     const timeoutId = setTimeout(() => {
-      setStage("waiting");
-    }, 1500);
+      setStage(transition.next);
+    }, transition.delayMs);
 
     return () => clearTimeout(timeoutId);
   }, [stage]);
@@ -55,6 +63,7 @@ export default function NfcLoadPage() {
     // React yeniden çizmeden gelen ikinci tıklamayı da engelle.
     if (flowLocked.current || isFetching || stage !== "idle") return;
     flowLocked.current = true;
+    readLocked.current = false;
     setIsFetching(true);
     setError(null);
 
@@ -77,8 +86,14 @@ export default function NfcLoadPage() {
     setStage("checking");
   }
 
+  function handleRead() {
+    if (stage !== "waiting" || readLocked.current) return;
+    readLocked.current = true;
+    setStage("reading");
+  }
+
   function handleCancel() {
-    if (stage !== "waiting") return;
+    if (stage !== "waiting" || readLocked.current) return;
     setStage("idle");
     flowLocked.current = false;
   }
@@ -134,10 +149,21 @@ export default function NfcLoadPage() {
             </div>
           </div>
           <p role="status">Telefonunuzu sayacınızdaki NFC alanına yaklaştırın.</p>
-          <Button fullWidth>Sayaca Okut (Simülasyon)</Button>
+          <Button fullWidth onClick={handleRead}>Sayaca Okut (Simülasyon)</Button>
           <Button variant="ghost" fullWidth onClick={handleCancel}>Vazgeç</Button>
         </Card>
+      )}
+      {stage === "reading" && (
+        <p role="status">Sayaç okunuyor…</p>
+      )}
+
+      {stage === "matched" && account && (
+        <p className="nfc-match-message" role="status">
+          <span className="nfc-match-icon" aria-hidden="true">✓</span>{" "}
+          Sayaç eşleşti: {account.meterNo} · Abonelik {account.subscriberNo}
+        </p>
       )}
     </div>
   );
 }
+

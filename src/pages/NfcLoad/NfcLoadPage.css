@@ -134,3 +134,12 @@
     transform: scale(2.2);
   }
 }
+
+.nfc-match-message {
+  overflow-wrap: anywhere;
+}
+
+.nfc-match-icon {
+  color: var(--color-success);
+  font-weight: 700;
+}
