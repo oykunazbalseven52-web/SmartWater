@@ -1,0 +1,8 @@
+.ui-app-layout {
+  min-height: 100vh;
+}
+
+/* İçerik alt menünün arkasında kalmamalı */
+.ui-app-layout__content {
+  padding-bottom: calc(var(--bottomnav-height) + var(--space-4));
+}

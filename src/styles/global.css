@@ -1,0 +1,98 @@
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+/* Body: laptopta kolonun dışı biraz daha koyu (Bölüm 4.3) */
+body {
+  min-height: 100vh;
+  font-family: var(--font-family);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-border);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Uygulama kolonu: telefon ekranı görünümü */
+#root {
+  position: relative;
+  width: 100%;
+  max-width: var(--app-max-width);
+  min-height: 100vh;
+  margin: 0 auto;
+  background-color: var(--color-bg);
+  box-shadow: 0 0 24px rgba(15, 30, 51, 0.12);
+}
+
+/* Tipografi (Bölüm 4.2) */
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.text-muted {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.balance-number {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+/* Sayfa içi kenar boşluğu */
+.page {
+  padding: var(--space-4);
+}

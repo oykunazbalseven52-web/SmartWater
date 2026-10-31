@@ -1,0 +1,28 @@
+:root {
+  --color-primary: #0B63CE;        /* ana mavi: butonlar, vurgular */
+  --color-primary-dark: #084A9A;   /* basılı buton, başlıklar */
+  --color-primary-light: #E8F1FC;  /* açık mavi arka plan kartları */
+  --color-accent: #12B5CB;         /* su/turkuaz vurgu: ilerleme, dalga animasyonu, grafik çubukları */
+  --color-bg: #F5F8FC;             /* sayfa arka planı */
+  --color-surface: #FFFFFF;        /* kart arka planı */
+  --color-text: #0F1E33;
+  --color-text-muted: #5B6B80;
+  --color-border: #DCE4EE;
+  --color-success: #1E9E5A;
+  --color-success-light: #E6F6EE;
+  --color-warning: #C98A0B;
+  --color-warning-light: #FFF6E0;
+  --color-danger: #D64545;
+  --color-danger-light: #FDECEC;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px;
+  --space-4: 16px; --space-5: 24px; --space-6: 32px;
+  --shadow-card: 0 2px 8px rgba(15, 30, 51, 0.06);
+  --app-max-width: 430px;
+  --topbar-height: 56px;
+  --bottomnav-height: 64px;
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}

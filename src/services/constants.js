@@ -1,0 +1,13 @@
+export const STORAGE_KEY = "smartwater.state.v1";
+export const PRICE_PER_M3_TL = 40;          // örnek tarife (arayüzde "40,00 TL / ton")
+export const MIN_PURCHASE_M3 = 1;
+export const MAX_PURCHASE_M3 = 100;
+export const PURCHASE_PRESETS_M3 = [5, 10, 20];
+export const LOW_BALANCE_THRESHOLD_M3 = 3;
+export const ANOMALY_RATIO = 1.3;           // bu ay > önceki 5 ay ortalaması × 1.3 ise uyarı
+export const SERVICE_DELAY_MS = 400;        // her servis çağrısında yapay gecikme
+export const PAYMENT_DELAY_MS = 1500;       // ödeme işleniyor hissi
+export const DEMO_SUBSCRIBER_NO = "SW-100245";
+export const DEMO_CARD = { number: "4242 4242 4242 4242", expiry: "12/29", cvv: "123" };
+export const DECLINED_TEST_CARD = "4000 0000 0000 0002"; // [Zaman kalırsa] başarısız ödeme senaryosu
+export const WRONG_METER_NO = "NFC-MTR-0009999";         // [Zaman kalırsa] yanlış sayaç senaryosu
