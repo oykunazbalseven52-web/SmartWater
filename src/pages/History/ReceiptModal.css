@@ -1,0 +1,80 @@
+.history-receipt-modal {
+  box-sizing: border-box;
+  width: calc(100% - var(--space-4) - var(--space-4));
+  max-width: calc(var(--app-max-width) - var(--space-4) - var(--space-4));
+  max-height: calc(100vh - var(--space-4) - var(--space-4));
+  max-height: calc(100dvh - var(--space-4) - var(--space-4));
+  margin: auto;
+  padding: var(--space-4);
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: 15px;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+
+.history-receipt-modal::backdrop {
+  background-color: var(--color-border);
+}
+
+.history-receipt-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.history-receipt-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-primary-dark);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.history-receipt-title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.history-receipt-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.history-receipt-field {
+  min-width: 0;
+}
+
+.history-receipt-label {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.history-receipt-value {
+  margin: 0;
+}
+
+.history-receipt-note {
+  margin: var(--space-5) 0 var(--space-4);
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.history-receipt-close {
+  min-height: 48px;
+}
+
+.history-receipt-close:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
