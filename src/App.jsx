@@ -9,6 +9,7 @@ import PurchasePage from "./pages/Purchase/PurchasePage.jsx";
 import NfcLoadPage from "./pages/NfcLoad/NfcLoadPage.jsx";
 import HistoryPage from "./pages/History/HistoryPage.jsx";
 import AboutPage from "./pages/About/AboutPage.jsx";
+import UsagePage from "./pages/Postpaid/UsagePage.jsx";
 
 // "/" → giriş yapılmışsa /home, değilse /login
 function RootRedirect() {
@@ -54,6 +55,7 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route path="/home" element={<HomePage />} />
+            <Route path="/usage" element={<UsagePage />} />
             <Route path="/purchase" element={<PurchasePage />} />
             <Route path="/load" element={<NfcLoadPage />} />
             <Route path="/history" element={<HistoryPage />} />
