@@ -1,0 +1,10 @@
+.savings-message {
+  margin-bottom: var(--space-3);
+  font-weight: 600;
+}
+
+.savings-tips {
+  margin-bottom: var(--space-3);
+  padding-left: var(--space-5);
+  list-style: disc;
+}

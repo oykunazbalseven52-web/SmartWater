@@ -1,0 +1,23 @@
+.daily-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+}
+
+.daily-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 var(--space-3);
+}
+
+.daily-value {
+  margin: 0;
+  font-weight: 600;
+}
+
+.daily-note + .daily-note {
+  margin-top: var(--space-2);
+}

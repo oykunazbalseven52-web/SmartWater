@@ -7,6 +7,8 @@ import Spinner from "../../components/Spinner.jsx";
 import { LOW_BALANCE_THRESHOLD_M3 } from "../../services/constants.js";
 import { getAccount, getLastMeterLoad, getUsageSummary } from "../../services/smartWaterService.js";
 import { formatDate, formatM3 } from "../../utils/format.js";
+import DailyAverageCard from "./DailyAverageCard.jsx";
+import SavingsCard from "./SavingsCard.jsx";
 import UsageChart from "./UsageChart.jsx";
 import "./HomePage.css";
 
@@ -129,6 +131,8 @@ export default function HomePage() {
       )}
 
       <UsageChart usage={usage} />
+      <SavingsCard usage={usage} />
+      <DailyAverageCard usage={usage} meterBalanceM3={account.meterBalanceM3} />
     </div>
   );
 }

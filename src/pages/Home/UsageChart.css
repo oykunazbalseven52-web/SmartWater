@@ -2,7 +2,7 @@
   display: flex;
   align-items: flex-end;
   gap: var(--space-2);
-  margin: var(--space-4) 0 var(--space-3);
+  margin-bottom: var(--space-3);
 }
 
 .home-chart-column {
@@ -10,25 +10,76 @@
   flex: 1;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--space-1);
   min-width: 0;
+  min-height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: none;
+}
+
+.home-chart-column:focus-visible {
+  outline: 2px solid var(--color-primary-dark);
+  outline-offset: 2px;
 }
 
 .home-chart-value {
   font-size: 13px;
   font-weight: 600;
+  transition: transform 250ms ease;
 }
 
 .home-chart-bar {
+  display: block;
   width: 100%;
   background-color: var(--color-accent);
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  transform-origin: bottom;
+  transition: transform 250ms ease, filter 250ms ease, background-color 250ms ease;
 }
 
 .home-chart-bar--current {
   background-color: var(--color-primary);
 }
 
+.home-chart-bar--selected {
+  background-color: var(--color-primary-dark);
+}
+
 .home-chart-bar--anomaly {
   background-color: var(--color-warning);
+}
+
+.home-chart-bar--anomaly.home-chart-bar--selected {
+  box-shadow: 0 0 0 2px var(--color-primary-dark);
+}
+
+.home-chart-detail {
+  margin-bottom: var(--space-1);
+}
+
+/* Dokunmatikte hover takılı kalmasın */
+@media (hover: hover) {
+  .home-chart-column:hover .home-chart-value,
+  .home-chart-column:hover .home-chart-bar {
+    transform: translateY(-4px);
+  }
+
+  .home-chart-column:hover .home-chart-bar {
+    filter: brightness(0.9);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-chart-value,
+  .home-chart-bar {
+    transition: none;
+  }
+
+  .home-chart-column:hover .home-chart-value,
+  .home-chart-column:hover .home-chart-bar {
+    transform: none;
+  }
 }
