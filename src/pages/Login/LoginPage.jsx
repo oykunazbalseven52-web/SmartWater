@@ -1,4 +1,9 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Button from "../../components/Button";
+import Alert from "../../components/Alert";
+import { DEMO_SUBSCRIBER_NO } from "../../services/constants.js";
+import { login } from "../../services/smartWaterService.js";
 import "./LoginPage.css";
 
 // Basit damla logosu (inline SVG, Bölüm 2)
@@ -22,6 +27,31 @@ function DropLogo() {
 
 // Ekran 1 — Giriş (Bölüm 7.1)
 export default function LoginPage() {
+  const navigate = useNavigate();
+  const [subscriberNo, setSubscriberNo] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const isDisabled = loading || subscriberNo.trim() === "";
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (isDisabled) return;
+    setError(null);
+    setLoading(true);
+    const result = await login(subscriberNo);
+    setLoading(false);
+    if (result.ok) {
+      navigate("/home", { replace: true });
+    } else {
+      setError(result.error.message);
+    }
+  }
+
+  function handleDemoClick() {
+    setSubscriberNo(DEMO_SUBSCRIBER_NO);
+  }
+
   return (
     <main className="page login-page">
       <header className="login-header">
@@ -39,6 +69,38 @@ export default function LoginPage() {
           Hakkında
         </Link>
       </section>
+
+      <form className="login-form" onSubmit={handleSubmit} noValidate>
+        <label className="login-field-label" htmlFor="subscriber-no">
+          Abonelik numarası
+        </label>
+        <input
+          id="subscriber-no"
+          className="login-field-input"
+          type="text"
+          placeholder="SW-100245"
+          value={subscriberNo}
+          onChange={(e) => setSubscriberNo(e.target.value)}
+          autoComplete="off"
+        />
+        {error && (
+          <Alert type="error">
+            {error}
+          </Alert>
+        )}
+        <Button
+          type="submit"
+          fullWidth
+          disabled={isDisabled}
+          loading={loading}
+          className="login-submit"
+        >
+          Giriş Yap
+        </Button>
+        <button type="button" className="login-demo-hint" onClick={handleDemoClick}>
+          Demo abonelik no: <strong>SW-100245</strong>
+        </button>
+      </form>
     </main>
   );
 }
