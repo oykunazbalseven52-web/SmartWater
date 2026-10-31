@@ -1,41 +1,136 @@
-import { useState } from "react";
-import Button from "../../components/Button.jsx";
+import { useEffect, useState } from "react";
+import Card from "../../components/Card.jsx";
 import Alert from "../../components/Alert.jsx";
-import { purchaseWater } from "../../services/smartWaterService.js";
-import { DEMO_CARD } from "../../services/constants.js";
-import { formatM3 } from "../../utils/format.js";
+import Spinner from "../../components/Spinner.jsx";
+import { getAccount } from "../../services/smartWaterService.js";
+import {
+  PRICE_PER_M3_TL,
+  MIN_PURCHASE_M3,
+  MAX_PURCHASE_M3,
+  PURCHASE_PRESETS_M3,
+} from "../../services/constants.js";
+import { formatTL } from "../../utils/format.js";
 import "./PurchasePage.css";
 
-// GEÇİCİ SAYFA — Sinem bu dosyanın içini Ekran 3'e (Bölüm 7.3) göre dolduracak.
-// Aşağıdaki test butonu da geçicidir (Bölüm 8.1.2); Sinem'in ekranıyla birlikte kalkar.
-export default function PurchasePage() {
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
+const DEFAULT_PRESET_M3 = 10;
 
-  async function handleTestPurchase() {
-    setLoading(true);
-    setResult(null);
-    const response = await purchaseWater({ amountM3: 10, card: DEMO_CARD });
-    setResult(response);
-    setLoading(false);
+// Geçerliyse tam sayıyı, değilse null döner
+function parseAmount(text) {
+  if (!/^\d+$/.test(text)) return null;
+  const value = Number(text);
+  return value >= MIN_PURCHASE_M3 && value <= MAX_PURCHASE_M3 ? value : null;
+}
+
+export default function PurchasePage() {
+  const [account, setAccount] = useState(null);
+  const [loadError, setLoadError] = useState(null);
+  const [selectedPreset, setSelectedPreset] = useState(DEFAULT_PRESET_M3);
+  const [amountText, setAmountText] = useState(String(DEFAULT_PRESET_M3));
+
+  const amountM3 = parseAmount(amountText);
+  const amountError = amountM3 === null;
+  const totalTL = amountM3 === null ? null : amountM3 * PRICE_PER_M3_TL;
+
+  function handlePresetClick(preset) {
+    setSelectedPreset(preset);
+    setAmountText(String(preset));
+  }
+
+  function handleAmountChange(event) {
+    setSelectedPreset(null);
+    setAmountText(event.target.value.trim());
+  }
+
+  useEffect(() => {
+    let cancelled = false;
+    getAccount().then((response) => {
+      if (cancelled) return;
+      if (response.ok) {
+        setAccount(response.data);
+      } else {
+        setLoadError(response.error.message);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (loadError) {
+    return (
+      <div className="page purchase-page">
+        <h1 className="page-title">Satın Al</h1>
+        <Alert type="error">{loadError}</Alert>
+      </div>
+    );
+  }
+
+  if (!account) {
+    return (
+      <div className="page purchase-page purchase-loading">
+        <Spinner size={32} />
+      </div>
+    );
   }
 
   return (
-    <div className="page purchase-placeholder">
+    <div className="page purchase-page">
       <h1 className="page-title">Satın Al</h1>
-      <p className="text-muted">Bu ekran yapım aşamasında — Sinem</p>
 
-      <Button variant="secondary" fullWidth loading={loading} onClick={handleTestPurchase}>
-        Test: 10 ton satın al (geçici)
-      </Button>
+      <Card className="purchase-account-summary">
+        <div className="purchase-summary-row">
+          <span className="text-muted">Abonelik no</span>
+          <strong>{account.subscriberNo}</strong>
+        </div>
+        <div className="purchase-summary-row">
+          <span className="text-muted">Sayaç no</span>
+          <strong>{account.meterNo}</strong>
+        </div>
+      </Card>
 
-      {result?.ok && (
-        <Alert type="success" title="Test satın alma başarılı">
-          {formatM3(result.data.transaction.amountM3)} eklendi. Yükleme bekleyen:{" "}
-          {formatM3(result.data.account.pendingM3)}
-        </Alert>
-      )}
-      {result && !result.ok && <Alert type="error">{result.error.message}</Alert>}
+      <Card title="Miktar seç">
+        <div className="purchase-presets" role="group" aria-label="Hazır miktarlar">
+          {PURCHASE_PRESETS_M3.map((preset) => (
+            <button
+              key={preset}
+              type="button"
+              className={`purchase-preset${selectedPreset === preset ? " purchase-preset--active" : ""}`}
+              aria-pressed={selectedPreset === preset}
+              onClick={() => handlePresetClick(preset)}
+            >
+              {preset} ton
+            </button>
+          ))}
+        </div>
+
+        <label className="purchase-field">
+          <span className="purchase-field-label">Farklı miktar (ton)</span>
+          <input
+            className={`purchase-input${amountError ? " purchase-input--error" : ""}`}
+            type="text"
+            inputMode="numeric"
+            autoComplete="off"
+            value={amountText}
+            onChange={handleAmountChange}
+            aria-invalid={amountError}
+            aria-describedby={amountError ? "purchase-amount-error" : undefined}
+          />
+        </label>
+        {amountError && (
+          <p id="purchase-amount-error" className="purchase-field-error">
+            Lütfen {MIN_PURCHASE_M3} ile {MAX_PURCHASE_M3} ton arasında tam sayı girin.
+          </p>
+        )}
+      </Card>
+
+      <Card title="Fiyat özeti">
+        <p className="text-muted purchase-unit-price">
+          Birim fiyat: {formatTL(PRICE_PER_M3_TL)} / ton (örnek tarife)
+        </p>
+        <p className="purchase-total">
+          Toplam: <strong>{totalTL === null ? "—" : formatTL(totalTL)}</strong>
+        </p>
+      </Card>
     </div>
   );
 }
