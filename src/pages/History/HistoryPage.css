@@ -1,5 +1,163 @@
-.history-placeholder {
+.history-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+  padding: var(--space-4);
+  overflow-wrap: anywhere;
+}
+
+.history-title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.history-loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-5);
+}
+
+.history-account-card,
+.history-transactions-card {
+  min-width: 0;
+}
+
+.history-account-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.history-account-field {
+  min-width: 0;
+}
+
+.history-account-label {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.history-account-value {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.history-transaction-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.history-transaction-row {
+  min-width: 0;
+}
+
+.history-transaction-content {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  min-width: 0;
+  width: 100%;
+  padding: var(--space-4) 0;
+}
+
+.history-transaction-button {
+  min-height: 44px;
+  border: 0;
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.history-transaction-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.history-transaction-row + .history-transaction-row {
+  border-top: 1px solid var(--color-border);
+}
+
+.history-transaction-type {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.history-transaction-icon {
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.history-transaction-date,
+.history-empty {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.history-transaction-amounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.history-status {
+  align-self: flex-start;
+  max-width: 100%;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.history-status--warning {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning);
+}
+
+.history-status--success {
+  background-color: var(--color-success-light);
+  color: var(--color-success);
+}
+
+.history-status--error {
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+.history-account-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.history-logout-button,
+.history-reset-button {
+  min-width: 0;
+  min-height: 48px;
+  overflow-wrap: anywhere;
+}
+
+.history-reset-button {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.history-logout-button:focus-visible,
+.history-reset-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
