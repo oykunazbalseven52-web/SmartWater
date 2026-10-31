@@ -1,6 +1,59 @@
-.login-placeholder {
+/* Ekran 1 — Giriş. Tüm sınıflar "login-" önekli (Bölüm 0.2, kural 6). */
+
+.login-page {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-5);
+  min-height: 100vh;
   padding-top: var(--space-6);
+  padding-bottom: var(--space-6);
+}
+
+/* Üst bölüm: logo + marka + slogan */
+.login-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.login-logo {
+  margin-bottom: var(--space-1);
+}
+
+.login-brand {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+.login-slogan {
+  font-size: 15px;
+  color: var(--color-text-muted);
+}
+
+/* Tanıtım metni + Hakkında bağlantısı */
+.login-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  text-align: center;
+  font-size: 15px;
+  color: var(--color-text);
+}
+
+.login-about-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.login-about-link:active {
+  color: var(--color-primary-dark);
 }
