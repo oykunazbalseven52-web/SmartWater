@@ -29,7 +29,11 @@ export default function ReceiptModal({ transaction, account, status, onClose }) 
       ref={dialogRef}
       className="history-receipt-modal"
       aria-labelledby="history-receipt-title"
-      onCancel={(event) => event.preventDefault()}
+      onCancel={(event) => {
+        // Esc: tarayıcı kapatmasın, durumu bizim state'imiz kapatsın
+        event.preventDefault();
+        onClose();
+      }}
     >
       <header className="history-receipt-header">
         <div className="history-receipt-brand">
@@ -67,7 +71,12 @@ export default function ReceiptModal({ transaction, account, status, onClose }) 
       </dl>
 
       <p className="history-receipt-note">Bu makbuz kâğıt yerine dijital olarak saklanır.</p>
-      <Button fullWidth onClick={onClose} className="history-receipt-close">Kapat</Button>
+      <div className="history-receipt-actions">
+        <Button variant="secondary" fullWidth onClick={() => window.print()} className="history-receipt-print">
+          PDF olarak kaydet
+        </Button>
+        <Button fullWidth onClick={onClose} className="history-receipt-close">Kapat</Button>
+      </div>
     </dialog>
   );
 }

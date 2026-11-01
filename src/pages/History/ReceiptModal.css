@@ -70,11 +70,47 @@
   font-weight: 400;
 }
 
-.history-receipt-close {
+.history-receipt-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.history-receipt-close,
+.history-receipt-print {
   min-height: 48px;
 }
 
-.history-receipt-close:focus-visible {
+.history-receipt-close:focus-visible,
+.history-receipt-print:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
+}
+
+/* Yazdır / PDF olarak kaydet: sadece makbuz çıkar */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .history-receipt-modal,
+  .history-receipt-modal * {
+    visibility: visible;
+  }
+
+  .history-receipt-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    overflow: visible;
+    border: 0;
+  }
+
+  .history-receipt-actions {
+    display: none;
+  }
 }
