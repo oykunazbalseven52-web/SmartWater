@@ -1,14 +1,24 @@
 import { useState } from "react";
 import Card from "../../components/Card.jsx";
 import { formatM3, formatMonthShort } from "../../utils/format.js";
+import { analyzeUsage } from "./usageTrend.js";
 import "./UsageChart.css";
 
 const CHART_HEIGHT_PX = 140;
 
-function formatChange(changePercent) {
-  if (changePercent > 0) return `geçen aya göre %${changePercent} fazla`;
-  if (changePercent < 0) return `geçen aya göre %${Math.abs(changePercent)} az`;
-  return "geçen ayla aynı";
+function formatChange({ trend, differenceM3, changePercent }) {
+  if (trend === "unknown") return "karşılaştırma için yeterli veri yok";
+  if (trend === "unchanged") return "geçen ayla aynı";
+
+  const direction = trend === "increased" ? "fazla" : "az";
+  // Yüzde yoksa veya %0'a yuvarlanıyorsa fark ton olarak gösterilir
+  const amount = changePercent ? `%${changePercent}` : formatM3(Math.abs(differenceM3));
+  return `geçen aya göre ${amount} ${direction}`;
+}
+
+function formatSummary(analysis) {
+  if (analysis.currentM3 === null) return "Bu ayın verisi yok";
+  return `Bu ay ${formatM3(analysis.currentM3)} · ${formatChange(analysis)}`;
 }
 
 // Çubuk üstü değerler birimsiz gösterilir (Bölüm 7.2), bu yüzden formatM3 kullanılmaz
@@ -31,7 +41,7 @@ function toSafeM3(value) {
 }
 
 export default function UsageChart({ usage }) {
-  const { currentMonthM3, changePercent, isAnomaly } = usage;
+  const { isAnomaly } = usage;
   const months = usage.months ?? [];
   const [selectedMonth, setSelectedMonth] = useState(null);
 
@@ -43,9 +53,7 @@ export default function UsageChart({ usage }) {
 
   return (
     <Card title="Aylık tüketim">
-      <p className="text-muted">
-        Bu ay {formatM3(currentMonthM3)} · {formatChange(changePercent)}
-      </p>
+      <p className="text-muted">{formatSummary(analyzeUsage(usage))}</p>
 
       {selected ? (
         <>
