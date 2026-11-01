@@ -1,0 +1,52 @@
+.home-analysis-stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.home-analysis-stat {
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-bg);
+  border-radius: var(--radius-sm);
+}
+
+.home-analysis-stat-value {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.home-analysis-trend {
+  margin-top: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+
+.home-analysis-trend--increased {
+  background-color: var(--color-warning-light);
+}
+
+.home-analysis-trend--decreased {
+  background-color: var(--color-success-light);
+}
+
+.home-analysis-trend--unchanged,
+.home-analysis-trend--unknown {
+  background-color: var(--color-primary-light);
+}
+
+.home-analysis-tips-title {
+  margin-top: var(--space-4);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.home-analysis-tips {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+  padding-left: var(--space-4);
+  list-style: disc;
+}
