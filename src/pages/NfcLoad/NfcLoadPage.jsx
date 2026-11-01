@@ -5,6 +5,7 @@ import Button from "../../components/Button.jsx";
 import Card from "../../components/Card.jsx";
 import SimulationBadge from "../../components/SimulationBadge.jsx";
 import Spinner from "../../components/Spinner.jsx";
+import { WRONG_METER_NO } from "../../services/constants.js";
 import { getAccount, loadToMeter } from "../../services/smartWaterService.js";
 import { formatM3 } from "../../utils/format.js";
 import "./NfcLoadPage.css";
@@ -22,6 +23,8 @@ export default function NfcLoadPage() {
   const isMounted = useRef(false);
   const flowLocked = useRef(false);
   const readLocked = useRef(false);
+  // Okutulan sayaç no; null ise kullanıcının kendi sayacı okutulur
+  const readMeterNo = useRef(null);
 
   useEffect(() => {
     let isActive = true;
@@ -48,9 +51,11 @@ export default function NfcLoadPage() {
   }, []);
 
   useEffect(() => {
+    // Yanlış sayaç okutulduysa "eşleşti" adımı atlanır; servis METER_MISMATCH döner
+    const isOwnMeter = !readMeterNo.current || readMeterNo.current === account?.meterNo;
     const transitions = {
       checking: { next: "waiting", delayMs: 1500 },
-      reading: { next: "matched", delayMs: 1000 },
+      reading: { next: isOwnMeter ? "matched" : "loading", delayMs: 1000 },
       matched: { next: "loading", delayMs: 1000 },
     };
     const transition = transitions[stage];
@@ -61,7 +66,7 @@ export default function NfcLoadPage() {
     }, transition.delayMs);
 
     return () => clearTimeout(timeoutId);
-  }, [stage]);
+  }, [stage, account]);
 
   useEffect(() => {
     if (stage !== "loading" || !account) return;
@@ -69,7 +74,7 @@ export default function NfcLoadPage() {
 
     // Aynı akışta effect tekrar kurulsa bile mevcut isteği kullan.
     if (!loadRequest.current) {
-      loadRequest.current = loadToMeter({ meterNo: account.meterNo });
+      loadRequest.current = loadToMeter({ meterNo: readMeterNo.current ?? account.meterNo });
     }
     const animationFinished = new Promise((resolve) => {
       finishAnimation.current = resolve;
@@ -107,6 +112,7 @@ export default function NfcLoadPage() {
     setLoadResult(null);
     loadRequest.current = null;
     readLocked.current = false;
+    readMeterNo.current = null;
 
     const response = await getAccount();
     if (!isMounted.current) return;
@@ -126,6 +132,7 @@ export default function NfcLoadPage() {
     if (flowLocked.current || isFetching || stage !== "idle") return;
     flowLocked.current = true;
     readLocked.current = false;
+    readMeterNo.current = null;
     loadRequest.current = null;
     setIsFetching(true);
     setError(null);
@@ -150,9 +157,10 @@ export default function NfcLoadPage() {
     setStage("checking");
   }
 
-  function handleRead() {
+  function handleRead(meterNo) {
     if (stage !== "waiting" || readLocked.current) return;
     readLocked.current = true;
+    readMeterNo.current = meterNo;
     setStage("reading");
   }
 
@@ -220,8 +228,11 @@ export default function NfcLoadPage() {
             </div>
           </div>
           <p role="status">Telefonunuzu sayacınızdaki NFC alanına yaklaştırın.</p>
-          <Button fullWidth onClick={handleRead}>Sayaca Okut (Simülasyon)</Button>
+          <Button fullWidth onClick={() => handleRead(account.meterNo)}>Sayaca Okut (Simülasyon)</Button>
           <Button variant="ghost" fullWidth onClick={handleCancel}>Vazgeç</Button>
+          <button type="button" className="nfc-wrong-meter-link" onClick={() => handleRead(WRONG_METER_NO)}>
+            Farklı bir sayaç okut (demo)
+          </button>
         </Card>
       )}
       {stage === "reading" && (

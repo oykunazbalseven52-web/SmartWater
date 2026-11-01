@@ -21,6 +21,14 @@ const TRANSACTION_STATUSES = {
   failed: { label: "Başarısız", tone: "error" },
 };
 
+const FILTERS = [
+  { id: "all", label: "Tümü" },
+  { id: "purchase", label: "Satın alma" },
+  { id: "meter_load", label: "Yükleme" },
+];
+
+const RESET_CONFIRM_TIMEOUT_MS = 4000;
+
 function TransactionIcon({ isPurchase }) {
   return (
     <svg
@@ -57,6 +65,7 @@ export default function HistoryPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [filter, setFilter] = useState("all");
   const [resetConfirmed, setResetConfirmed] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
   const [actionError, setActionError] = useState(null);
@@ -90,6 +99,13 @@ export default function HistoryPage() {
     runAccountAction("reset");
   }
 
+  // Onay istemi bir süre sonra kendiliğinden kalkar; yanlışlıkla sıfırlamayı önler
+  useEffect(() => {
+    if (!resetConfirmed) return;
+    const timeoutId = setTimeout(() => setResetConfirmed(false), RESET_CONFIRM_TIMEOUT_MS);
+    return () => clearTimeout(timeoutId);
+  }, [resetConfirmed]);
+
   useEffect(() => {
     let active = true;
 
@@ -119,6 +135,9 @@ export default function HistoryPage() {
       active = false;
     };
   }, []);
+
+  const visibleTransactions =
+    filter === "all" ? transactions : transactions.filter((transaction) => transaction.type === filter);
 
   return (
     <div className="history-page">
@@ -158,11 +177,28 @@ export default function HistoryPage() {
           </Card>
 
           <Card title="İşlem geçmişi" className="history-transactions-card">
+            {transactions.length > 0 && (
+              <div className="history-filters" role="group" aria-label="İşlem filtresi">
+                {FILTERS.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={`history-filter${filter === item.id ? " history-filter--active" : ""}`}
+                    aria-pressed={filter === item.id}
+                    onClick={() => setFilter(item.id)}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            )}
             {transactions.length === 0 ? (
               <p className="history-empty">Henüz işlem yok.</p>
+            ) : visibleTransactions.length === 0 ? (
+              <p className="history-empty">Bu filtrede işlem yok.</p>
             ) : (
               <ul className="history-transaction-list">
-                {transactions.map((transaction) => {
+                {visibleTransactions.map((transaction) => {
                   const isPurchase = transaction.type === "purchase";
                   const status = TRANSACTION_STATUSES[transaction.status];
                   const TransactionElement = isPurchase ? "button" : "div";
