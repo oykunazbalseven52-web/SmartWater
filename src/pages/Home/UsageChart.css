@@ -1,17 +1,40 @@
 .home-chart {
   display: flex;
-  align-items: flex-end;
-  gap: var(--space-2);
+  align-items: stretch;
+  gap: var(--space-1);
   margin: var(--space-4) 0 var(--space-3);
 }
 
+/* Tüm sütun tıklanabilir; böylece 0 değerli aylar da seçilebilir */
 .home-chart-column {
   display: flex;
   flex: 1;
   flex-direction: column;
+  justify-content: flex-end;
   align-items: center;
   gap: var(--space-1);
   min-width: 0;
+  padding: var(--space-1) 2px;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.home-chart-column:focus-visible {
+  outline: 2px solid var(--color-primary-dark);
+  outline-offset: 2px;
+}
+
+/* Seçim renkle sınırlı kalmaz: çerçeve + kalın etiket; çubuk rengi değişmez */
+.home-chart-column--selected {
+  background-color: var(--color-primary-light);
+  box-shadow: inset 0 0 0 1px var(--color-primary);
+}
+
+.home-chart-column--selected .home-chart-month {
+  font-weight: 600;
+  color: var(--color-text);
 }
 
 .home-chart-value {
@@ -20,9 +43,13 @@
 }
 
 .home-chart-bar {
+  display: block;
   width: 100%;
+  min-height: 2px;
   background-color: var(--color-accent);
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  transform-origin: bottom;
+  transition: transform 0.15s ease;
 }
 
 .home-chart-bar--current {
@@ -31,4 +58,46 @@
 
 .home-chart-bar--anomaly {
   background-color: var(--color-warning);
+}
+
+/* Dokunmatik ekranda hover takılı kalmasın */
+@media (hover: hover) {
+  .home-chart-column:hover {
+    background-color: var(--color-bg);
+  }
+
+  .home-chart-column--selected:hover {
+    background-color: var(--color-primary-light);
+  }
+
+  /* Dikey büyüme, üstteki değer etiketine değmeyecek kadar küçük tutuldu */
+  .home-chart-column:hover .home-chart-bar {
+    transform: scale(1.06, 1.02);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-chart-column,
+  .home-chart-bar {
+    transition: none;
+  }
+
+  .home-chart-column:hover .home-chart-bar {
+    transform: none;
+  }
+}
+
+.home-chart-selected {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-3);
+  margin-bottom: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-primary-light);
+  border-radius: var(--radius-sm);
+}
+
+.home-chart-empty {
+  margin: var(--space-4) 0 var(--space-3);
 }
