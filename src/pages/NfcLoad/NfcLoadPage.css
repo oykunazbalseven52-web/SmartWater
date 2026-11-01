@@ -68,6 +68,16 @@
   text-align: center;
 }
 
+.nfc-wrong-meter-link {
+  min-height: 44px;
+  padding: 0 var(--space-2);
+  border: 0;
+  background: none;
+  color: var(--color-primary);
+  font-size: 13px;
+  text-decoration: underline;
+}
+
 .nfc-animation {
   display: flex;
   align-items: center;
