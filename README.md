@@ -92,6 +92,15 @@ The project aims to improve access to water management services, increase awaren
 
 The prototype does not claim verified reductions in water consumption or environmental impact.
 
+## Copyright Notice
+
+Copyright © 2026 Vector Five Team.
+All rights reserved.
+
+SmartWater is developed by the Vector Five team.
+Unauthorized copying, modification, distribution,
+or commercial use is not permitted.
+
 ## Development Team
 
 - Eylül Özcan
